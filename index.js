@@ -33,16 +33,18 @@ export const convertToSvg = async (html) => {
     // console.log(tag, imageUrlWithSrc)
     if (imageUrlWithSrc && imageUrlWithSrc.length > 0) {
       const imageUrl = imageUrlWithSrc[0].match(reg2);
-      const url = new URL(imageUrl[0].replace('"', ""));
-      if (url.searchParams.get("img2svg") != "false") {
-        let replace = true;
-        const svgBody = await fetchSVG(url.href).catch((error) => {
-          console.log("Some error occurred while downloading", url.href);
-          console.log(error);
-          replace = false;
-        });
-        if (replace) {
-          finalHtml = finalHtml.replace(tag, svgBody);
+      if (imageUrl && imageUrl.length > 0) {
+        const url = new URL(imageUrl[0].replace('"', ""));
+        if (url.searchParams.get("img2svg") != "false") {
+          let replace = true;
+          const svgBody = await fetchSVG(url.href).catch((error) => {
+            console.log("Some error occurred while downloading", url.href);
+            console.log(error);
+            replace = false;
+          });
+          if (replace) {
+            finalHtml = finalHtml.replace(tag, svgBody);
+          }
         }
       }
     }
